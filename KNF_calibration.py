@@ -6,13 +6,18 @@ from datetime import datetime
 # Configuration
 pump_control_pin = 18  # GPIO pin for PWM control
 frequency = 1000  # PWM frequency in Hz
-duty_cycles = [2, 5, 10, 15]  # Duty cycles to test
 run_time = 30  # Time to run the pump at each duty cycle in seconds
+tolerance = 0.5  # Acceptable tolerance for the flow rate in mL/min
+initial_duty_cycle = 5  # Initial duty cycle to start with
+duty_cycle_step = 1  # Step to adjust the duty cycle
 
 # Ask user for the base name of the calibration file
 base_name = input("Enter the base name for the calibration file: ")
 current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
 calibration_file = f"{base_name}_{current_time}.csv"
+
+# Ask user for the target flow rate
+target_flow_rate = float(input("Enter the target flow rate (mL/min): "))
 
 # GPIO setup
 GPIO.setmode(GPIO.BCM)
@@ -27,7 +32,8 @@ try:
         writer = csv.writer(file)
         writer.writerow(["Duty Cycle (%)", "Flow Rate (mL/min)"])  # Header
 
-        for duty_cycle in duty_cycles:
+        duty_cycle = initial_duty_cycle
+        while True:
             # Set the current PWM duty cycle
             pwm.ChangeDutyCycle(duty_cycle)
             print(f"Running pump at {duty_cycle}% duty cycle for {run_time} seconds...")
@@ -49,7 +55,18 @@ try:
             writer.writerow([duty_cycle, flow_rate])
             print(f"Recorded: {duty_cycle}% duty cycle = {flow_rate:.2f} mL/min")
 
-            # Brief pause before the next duty cycle
+            # Check if the flow rate is within the acceptable tolerance
+            if abs(flow_rate - target_flow_rate) <= tolerance:
+                print(f"Target flow rate of {target_flow_rate} mL/min achieved at {duty_cycle}% duty cycle.")
+                break
+
+            # Adjust the duty cycle based on the measured flow rate
+            if flow_rate < target_flow_rate:
+                duty_cycle += duty_cycle_step
+            else:
+                duty_cycle -= duty_cycle_step
+
+            # Brief pause before the next iteration
             time.sleep(2)
 
         print(f"Calibration complete. Data saved to {calibration_file}")

@@ -7,7 +7,7 @@ from datetime import datetime
 pump_control_pin = 18  # GPIO pin for PWM control
 frequency = 1000  # PWM frequency in Hz
 run_time = 30  # Time to run the pump at each duty cycle in seconds
-tolerance = 0.5  # Acceptable tolerance for the flow rate in mL/min
+tolerance = 0.1  # Acceptable tolerance for the flow rate in mL/min
 initial_duty_cycle = 5  # Initial duty cycle to start with
 initial_step_size = 5  # Initial step size for duty cycle adjustments
 min_step_size = 1  # Minimum step size for fine adjustments

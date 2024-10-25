@@ -5,7 +5,7 @@ import csv
 # Configuration
 pump_control_pin = 18  # GPIO pin for PWM control
 frequency = 1000  # PWM frequency in Hz
-duty_cycles = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]  # Duty cycles to test
+duty_cycles = [2,5,10,15,20]  # Duty cycles to test
 calibration_file = "calibration.csv"  # File to save calibration data
 run_time = 30  # Time to run the pump at each duty cycle in seconds
 

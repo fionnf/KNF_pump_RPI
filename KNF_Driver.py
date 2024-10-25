@@ -29,9 +29,6 @@ try:
         # Apply the PWM signal to the pump
         pwm.ChangeDutyCycle(args.pwm_percent)
 
-        # Print details for monitoring
-        print(f"PWM Duty Cycle: {args.pwm_percent:.2f}%")
-
         # Wait for 1 second before updating
         time.sleep(1)
 

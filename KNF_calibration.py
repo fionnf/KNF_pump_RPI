@@ -1,13 +1,18 @@
 import RPi.GPIO as GPIO
 import time
 import csv
+from datetime import datetime
 
 # Configuration
 pump_control_pin = 18  # GPIO pin for PWM control
 frequency = 1000  # PWM frequency in Hz
-duty_cycles = [2,5,10,15]  # Duty cycles to test
-calibration_file = "calibration.csv"  # File to save calibration data
+duty_cycles = [2, 5, 10, 15]  # Duty cycles to test
 run_time = 30  # Time to run the pump at each duty cycle in seconds
+
+# Ask user for the base name of the calibration file
+base_name = input("Enter the base name for the calibration file: ")
+current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+calibration_file = f"{base_name}_{current_time}.csv"
 
 # GPIO setup
 GPIO.setmode(GPIO.BCM)

@@ -1,32 +1,33 @@
 import RPi.GPIO as GPIO
 import time
+import argparse
 
-# Pin setup
-pump_control_pin = 18  # GPIO 18 for PWM output
-desired_flow_rate = 100  # Desired flow rate in mL/min (adjust as needed)
+# Set up command-line arguments
+parser = argparse.ArgumentParser(description="Pump control script for Raspberry Pi.")
+parser.add_argument(
+    "--flow_rate", type=float, default=100, help="Desired flow rate in mL/min (default: 100)"
+)
+parser.add_argument(
+    "--model", type=str, choices=["KP", "KT"], default="KP", help="Pump model type: KP or KT (default: KP)"
+)
+parser.add_argument(
+    "--pwm_pin", type=int, default=18, help="GPIO pin number for PWM output (default: 18)"
+)
+parser.add_argument(
+    "--frequency", type=int, default=1000, help="PWM frequency in Hz (default: 1000)"
+)
 
-# Model type (0 for KP, 1 for KT)
-model_type = 0  # Set to 0 for KP model, 1 for KT model
+args = parser.parse_args()
 
-# Set up GPIO
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(pump_control_pin, GPIO.OUT)
+# Map model type to slope values
+model_slopes = {
+    "KP": 33.33,  # KP model: 0.5V = 0 mL/min, 5V = 150 mL/min
+    "KT": 28.89,  # KT model: 0.5V = 0 mL/min, 5V = 130 mL/min
+}
 
-# Initialize PWM on GPIO 18 at 1000 Hz
-pwm = GPIO.PWM(pump_control_pin, 1000)  # 1000 Hz frequency
-pwm.start(0)  # Start PWM with 0% duty cycle (pump off)
-
-def calculate_pwm_value(flow_rate, model_type):
-    """
-    Function to calculate PWM duty cycle based on the desired flow rate.
-    Handles both KP and KT models:
-    - KP: 0.5V = 0 mL/min, 5V = 150 mL/min
-    - KT: 0.5V = 0 mL/min, 5V = 130 mL/min
-    """
-    if model_type == 0:  # KP model
-        slope = 33.33  # Flow rate per volt for KP model
-    else:  # KT model
-        slope = 28.89  # Flow rate per volt for KT model
+# Calculate the PWM value based on the flow rate and model
+def calculate_pwm_value(flow_rate, model):
+    slope = model_slopes[model]  # Select the correct slope based on model
 
     # Calculate control voltage based on desired flow rate
     control_voltage = (flow_rate / slope) + 0.5
@@ -41,20 +42,24 @@ def calculate_pwm_value(flow_rate, model_type):
     pwm_value = (control_voltage - 0.5) * (100.0 / 4.5)  # Convert to % for GPIO PWM
     return pwm_value
 
+# Set up GPIO
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(args.pwm_pin, GPIO.OUT)
+
+# Initialize PWM on the specified pin with the given frequency
+pwm = GPIO.PWM(args.pwm_pin, args.frequency)
+pwm.start(0)  # Start PWM with 0% duty cycle (pump off)
+
 try:
     while True:
         # Calculate the PWM value for the desired flow rate and model type
-        pwm_value = calculate_pwm_value(desired_flow_rate, model_type)
+        pwm_value = calculate_pwm_value(args.flow_rate, args.model)
 
         # Apply the PWM signal to the pump
         pwm.ChangeDutyCycle(pwm_value)
 
         # Print details for monitoring
-        if model_type == 0:
-            model_name = "KP"
-        else:
-            model_name = "KT"
-        print(f"Model: {model_name}, Desired Flow Rate: {desired_flow_rate} mL/min, PWM Duty Cycle: {pwm_value:.2f}%")
+        print(f"Model: {args.model}, Desired Flow Rate: {args.flow_rate} mL/min, PWM Duty Cycle: {pwm_value:.2f}%")
 
         # Wait for 1 second before updating
         time.sleep(1)

@@ -9,7 +9,8 @@ frequency = 1000  # PWM frequency in Hz
 run_time = 30  # Time to run the pump at each duty cycle in seconds
 tolerance = 0.5  # Acceptable tolerance for the flow rate in mL/min
 initial_duty_cycle = 5  # Initial duty cycle to start with
-duty_cycle_step = 1  # Step to adjust the duty cycle
+initial_step_size = 5  # Initial step size for duty cycle adjustments
+min_step_size = 1  # Minimum step size for fine adjustments
 
 # Ask user for the base name of the calibration file
 base_name = input("Enter the base name for the calibration file: ")
@@ -33,6 +34,7 @@ try:
         writer.writerow(["Duty Cycle (%)", "Flow Rate (mL/min)"])  # Header
 
         duty_cycle = initial_duty_cycle
+        step_size = initial_step_size
         while True:
             # Set the current PWM duty cycle
             pwm.ChangeDutyCycle(duty_cycle)
@@ -62,9 +64,12 @@ try:
 
             # Adjust the duty cycle based on the measured flow rate
             if flow_rate < target_flow_rate:
-                duty_cycle += duty_cycle_step
+                duty_cycle += step_size
             else:
-                duty_cycle -= duty_cycle_step
+                duty_cycle -= step_size
+
+            # Decrease the step size as the difference between the measured flow rate and the target flow rate decreases
+            step_size = max(min_step_size, step_size / 2)
 
             # Brief pause before the next iteration
             time.sleep(2)

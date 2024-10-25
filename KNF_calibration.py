@@ -19,9 +19,6 @@ calibration_file = f"{base_name}_{current_time}.csv"
 # Ask user for the initial duty cycle
 initial_duty_cycle = float(input("Enter the initial duty cycle (%): "))
 
-# Ask user for the target flow rates
-target_flow_rates = [10, 20]
-
 # GPIO setup
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(pump_control_pin, GPIO.OUT)
@@ -35,7 +32,12 @@ try:
         writer = csv.writer(file)
         writer.writerow(["Duty Cycle (%)", "Flow Rate (mL/min)"])  # Header
 
-        for target_flow_rate in target_flow_rates:
+        while True:
+            # Ask user for the target flow rate
+            target_flow_rate = float(input("Enter the target flow rate (mL/min) or '0' to finish: "))
+            if target_flow_rate == 0:
+                break
+
             duty_cycle = initial_duty_cycle
             step_size = initial_step_size
             while True:

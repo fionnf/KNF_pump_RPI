@@ -7,8 +7,8 @@ Raspberry Pi Zero 2 W GPIO Header (40 pins)
 │  5  │ GPIO 3 (SCL1)       │  6  │ GND
 │  7  │ GPIO 4              │  8  │ GPIO 14 (TXD)
 │  9  │ GND                 │ 10  │ GPIO 15 (RXD)
-│ 11  │ GPIO 17             │ 12  │ GPIO 18 (PWM0) <─ Pump Control (White)
-│ 13  │ GPIO 27             │ 14  │ GND               <─ Pump Ground (Black)
+│ 11  │ GPIO 17             │ 12  │ GPIO 18 (PWM0)    <─ Pump Control 1 (Brown)
+│ 13  │ GPIO 27             │ 14  │ GND               <─ Pump Ground (Red)
 │ 15  │ GPIO 22             │ 16  │ GPIO 23
 │ 17  │ 3.3V Power          │ 18  │ GPIO 24
 │ 19  │ GPIO 10 (MOSI)      │ 20  │ GND
@@ -19,7 +19,7 @@ Raspberry Pi Zero 2 W GPIO Header (40 pins)
 │ 29  │ GPIO 5              │ 30  │ GND
 │ 31  │ GPIO 6              │ 32  │ GPIO 12 (PWM0)
 │ 33  │ GPIO 13 (PWM1)      │ 34  │ GND
-│ 35  │ GPIO 19 (MISO, PWM1)│ 36  │ GPIO 16
+│ 35  │ GPIO 19 (MISO, PWM1)│ 36  │ GPIO 16          <─ Pump Control 2 (Blue)
 │ 37  │ GPIO 26             │ 38  │ GPIO 20 (MOSI)
 │ 39  │ GND                 │ 40  │ GPIO 21 (SCLK)
 └─────┴─────────────────────┴─────┘

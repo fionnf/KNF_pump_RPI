@@ -14,7 +14,7 @@ parser.add_argument(
     "--pwm_pin1", type=int, default=18, help="GPIO pin number for PWM output for pump 1 (default: 18)"
 )
 parser.add_argument(
-    "--pwm_pin2", type=int, default=19, help="GPIO pin number for PWM output for pump 2 (default: 19)"
+    "--pwm_pin2", type=int, default=16, help="GPIO pin number for PWM output for pump 2 (default: 16)"
 )
 parser.add_argument(
     "--frequency", type=int, default=1000, help="PWM frequency in Hz (default: 1000)"

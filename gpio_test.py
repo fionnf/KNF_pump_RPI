@@ -3,7 +3,7 @@ import time
 
 # Pin configuration
 pump_pin = 18  # GPIO pin for the pump control
-speed_pin = 23  # GPIO pin for the pump speed input
+speed_pin = 24  # GPIO pin for the pump speed input
 
 # Set up GPIO
 GPIO.setmode(GPIO.BCM)

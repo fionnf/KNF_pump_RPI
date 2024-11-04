@@ -22,8 +22,8 @@ void setup() {
   pinMode(SPEED_PIN2, INPUT);
 
   // Set initial pump speeds to 9% duty cycle
-  analogWrite(PUMP_PIN1, map(9, 0, 100, 0, 255));
-  analogWrite(PUMP_PIN2, map(9, 0, 100, 0, 255));
+  analogWrite(PUMP_PIN1, map(20, 0, 100, 0, 255));
+  analogWrite(PUMP_PIN2, map(20, 0, 100, 0, 255));
 }
 
 void loop() {

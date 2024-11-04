@@ -64,13 +64,22 @@ def rpm_callback2(channel):
     global count2
     count2 += 1
 
-# Set up interrupts for RPM reading
-try:
-    GPIO.add_event_detect(args.rpm_pin1, GPIO.FALLING, callback=rpm_callback1)
-    GPIO.add_event_detect(args.rpm_pin2, GPIO.FALLING, callback=rpm_callback2)
-except RuntimeError as e:
-    print(f"Error setting up GPIO event detection: {e}")
-    GPIO.cleanup()
+# Retry logic for setting up interrupts
+def setup_interrupts():
+    retries = 3
+    for _ in range(retries):
+        try:
+            GPIO.add_event_detect(args.rpm_pin1, GPIO.FALLING, callback=rpm_callback1)
+            GPIO.add_event_detect(args.rpm_pin2, GPIO.FALLING, callback=rpm_callback2)
+            return True
+        except RuntimeError as e:
+            print(f"Error setting up GPIO event detection: {e}")
+            GPIO.cleanup()
+            time.sleep(1)
+    return False
+
+if not setup_interrupts():
+    print("Failed to set up GPIO event detection after multiple attempts.")
     exit(1)
 
 # Set up logging

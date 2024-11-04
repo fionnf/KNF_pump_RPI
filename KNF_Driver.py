@@ -30,6 +30,9 @@ parser.add_argument(
 
 args = parser.parse_args()
 
+# Disable GPIO warnings
+GPIO.setwarnings(False)
+
 # Set up GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(args.pwm_pin1, GPIO.OUT)

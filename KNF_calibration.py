@@ -4,7 +4,7 @@ import csv
 from datetime import datetime
 
 # Configuration
-pump_control_pin = 18  # GPIO pin for PWM control
+pump_control_pin = 18  # GPIO pin for PWM control of the pump
 frequency = 1000  # PWM frequency in Hz
 run_time = 30  # Time to run the pump at each duty cycle in seconds
 

@@ -1,6 +1,9 @@
 import RPi.GPIO as GPIO
 import time
 
+# Clean up GPIO settings at the start
+GPIO.cleanup()
+
 # Pin configuration
 pump_pin = 18  # GPIO pin for the pump control
 speed_pin = 23  # GPIO pin for the pump speed input

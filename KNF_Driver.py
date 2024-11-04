@@ -71,6 +71,8 @@ def setup_interrupts():
     retries = 3
     for _ in range(retries):
         try:
+            GPIO.setup(args.rpm_pin1, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+            GPIO.setup(args.rpm_pin2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
             GPIO.add_event_detect(args.rpm_pin1, GPIO.FALLING, callback=rpm_callback1)
             GPIO.add_event_detect(args.rpm_pin2, GPIO.FALLING, callback=rpm_callback2)
             return True

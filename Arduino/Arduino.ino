@@ -1,4 +1,4 @@
-
+#include <Arduino.h>
 
 // Define pump control and tacho pins
 #define PUMP_PIN1 9        // PWM pin for Pump 1
@@ -57,6 +57,11 @@ void loop() {
     count2++;
   }
   lastState2 = currentState2;
+
+  // Print the raw analog values in a continuous stream
+  Serial.print(analogRead(TACHO_PIN1));
+  Serial.print(",");
+  Serial.println(analogRead(TACHO_PIN2));
 
   // Calculate RPM every updateInterval milliseconds
   unsigned long currentMillis = millis();

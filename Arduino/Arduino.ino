@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <TimerOne.h>
 
 // Define pump control and tacho pins
 #define PUMP_PIN1 9        // PWM pin for Pump 1
@@ -35,10 +36,9 @@ void setup() {
   pinMode(TACHO_PIN2, INPUT);
 
   // Set a fixed PWM frequency and initial duty cycle
-  analogWriteFrequency(PUMP_PIN1, 10000);  // Set frequency to 10 kHz
-  analogWriteFrequency(PUMP_PIN2, 10000);  // Set frequency to 10 kHz
-  analogWrite(PUMP_PIN1, dutyCycle1);      // Set initial duty cycle for Pump 1
-  analogWrite(PUMP_PIN2, dutyCycle2);      // Set initial duty cycle for Pump 2
+  Timer1.initialize(100);  // Set frequency to 10 kHz (100 microseconds period)
+  Timer1.pwm(PUMP_PIN1, dutyCycle1);
+  Timer1.pwm(PUMP_PIN2, dutyCycle2);
 }
 
 void loop() {
@@ -57,11 +57,6 @@ void loop() {
     count2++;
   }
   lastState2 = currentState2;
-
-  // Print the raw analog values in a continuous stream
-  Serial.print(analogRead(TACHO_PIN1));
-  Serial.print(",");
-  Serial.println(analogRead(TACHO_PIN2));
 
   // Calculate RPM every updateInterval milliseconds
   unsigned long currentMillis = millis();

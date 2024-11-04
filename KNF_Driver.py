@@ -33,6 +33,9 @@ args = parser.parse_args()
 # Disable GPIO warnings
 GPIO.setwarnings(False)
 
+# Clean up GPIO settings before setting up
+GPIO.cleanup()
+
 # Set up GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(args.pwm_pin1, GPIO.OUT)
@@ -62,8 +65,13 @@ def rpm_callback2(channel):
     count2 += 1
 
 # Set up interrupts for RPM reading
-GPIO.add_event_detect(args.rpm_pin1, GPIO.FALLING, callback=rpm_callback1)
-GPIO.add_event_detect(args.rpm_pin2, GPIO.FALLING, callback=rpm_callback2)
+try:
+    GPIO.add_event_detect(args.rpm_pin1, GPIO.FALLING, callback=rpm_callback1)
+    GPIO.add_event_detect(args.rpm_pin2, GPIO.FALLING, callback=rpm_callback2)
+except RuntimeError as e:
+    print(f"Error setting up GPIO event detection: {e}")
+    GPIO.cleanup()
+    exit(1)
 
 # Set up logging
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")

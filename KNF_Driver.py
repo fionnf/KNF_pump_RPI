@@ -36,8 +36,10 @@ GPIO.setwarnings(False)
 # Clean up GPIO settings before setting up
 GPIO.cleanup()
 
-# Set up GPIO
+# Set pin numbering mode
 GPIO.setmode(GPIO.BCM)
+
+# Set up GPIO
 GPIO.setup(args.pwm_pin1, GPIO.OUT)
 GPIO.setup(args.pwm_pin2, GPIO.OUT)
 GPIO.setup(args.rpm_pin1, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -75,6 +77,7 @@ def setup_interrupts():
         except RuntimeError as e:
             print(f"Error setting up GPIO event detection: {e}")
             GPIO.cleanup()
+            GPIO.setmode(GPIO.BCM)
             time.sleep(1)
     return False
 

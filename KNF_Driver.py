@@ -71,6 +71,8 @@ def setup_interrupts():
     retries = 3
     for _ in range(retries):
         try:
+            GPIO.cleanup()  # Ensure GPIO is cleaned up before setting up
+            GPIO.setmode(GPIO.BCM)
             GPIO.setup(args.rpm_pin1, GPIO.IN, pull_up_down=GPIO.PUD_UP)
             GPIO.setup(args.rpm_pin2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
             GPIO.add_event_detect(args.rpm_pin1, GPIO.FALLING, callback=rpm_callback1)
@@ -78,8 +80,6 @@ def setup_interrupts():
             return True
         except RuntimeError as e:
             print(f"Error setting up GPIO event detection: {e}")
-            GPIO.cleanup()
-            GPIO.setmode(GPIO.BCM)
             time.sleep(1)
     return False
 

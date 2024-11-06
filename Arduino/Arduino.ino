@@ -15,8 +15,8 @@ unsigned long rpm2 = 0;
 
 // Pump duty cycle (0-255 for 0-100%)
 // 53 = 20ml/min
-int dutyCycle1 = 53;  // Adjust this value to set pump speed
-int dutyCycle2 = 53;  // Adjust this value to set pump speed
+int dutyCycle1 = 70;  // Adjust this value to set pump speed
+int dutyCycle2 = 70;  // Adjust this value to set pump speed
 
 const int updateInterval = 1000; // RPM update interval in ms
 unsigned long previousMillis = 0;
@@ -76,7 +76,7 @@ void loop() {
 
     // Adjust duty cycle of Pump 2 to match RPM of Pump 1
     int rpmDifference = rpm1 - rpm2;
-    dutyCycle2 += rpmDifference / 100; // Adjust this factor as needed
+    dutyCycle2 += rpmDifference / 200; // Adjust this factor as needed
     dutyCycle2 = constrain(dutyCycle2, 0, 255);
     Timer1.pwm(PUMP_PIN2, dutyCycle2);
 

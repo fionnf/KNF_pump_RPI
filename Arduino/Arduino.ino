@@ -14,9 +14,9 @@ unsigned long rpm1 = 0;
 unsigned long rpm2 = 0;
 
 // Pump duty cycle (0-255 for 0-100%)
-// 53 = 20ml/min
-int dutyCycle1 = 70;  // Adjust this value to set pump speed
-int dutyCycle2 = 70;  // Adjust this value to set pump speed
+// 70 = 20ml/min
+int dutyCycle1 = 80;  // Adjust this value to set pump speed
+int dutyCycle2 = 80;  // Adjust this value to set pump speed
 
 const int updateInterval = 1000; // RPM update interval in ms
 unsigned long previousMillis = 0;
@@ -68,15 +68,14 @@ void loop() {
     rpm1 = count1 * (60000 / updateInterval); // Pulses per minute for Pump 1
     rpm2 = count2 * (60000 / updateInterval); // Pulses per minute for Pump 2
 
-    // Print RPM values to serial
-    Serial.print("Dom RPM: ");
-    Serial.println(rpm1);
-    Serial.print("Sub RPM: ");
+    // Print RPM values to serial in a format suitable for Serial Plotter
+    Serial.print(rpm1);
+    Serial.print(", ");
     Serial.println(rpm2);
 
     // Adjust duty cycle of Pump 2 to match RPM of Pump 1
     int rpmDifference = rpm1 - rpm2;
-    dutyCycle2 += rpmDifference / 200; // Adjust this factor as needed
+    dutyCycle2 += rpmDifference / 100; // Adjust this factor as needed
     dutyCycle2 = constrain(dutyCycle2, 0, 255);
     Timer1.pwm(PUMP_PIN2, dutyCycle2);
 

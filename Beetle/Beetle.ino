@@ -2,11 +2,11 @@
 #include <TimerOne.h>
 
 // Define pump control and tacho pins
-#define PUMP_PIN1 10        // PWM pin for Pump 1
-#define PUMP_PIN2 9         // PWM pin for Pump 2
+#define PUMP_PIN1 9       // PWM pin for Pump 1
+#define PUMP_PIN2 10         // PWM pin for Pump 2
 #define PUMP_PIN3 11        // PWM pin for NMR Pump
-#define TACHO_PIN1 A1       // Tacho pin for Pump 1 (using A0 for polling)
-#define TACHO_PIN2 A0       // Tacho pin for Pump 2 (using A1 for polling)
+#define TACHO_PIN1 A0       // Tacho pin for Pump 1 (using A0 for polling)
+#define TACHO_PIN2 A1       // Tacho pin for Pump 2 (using A1 for polling)
 #define TACHO_PIN3 A2       // Tacho pin for NMR Pump
 
 // Variables to store pulse counts and RPM

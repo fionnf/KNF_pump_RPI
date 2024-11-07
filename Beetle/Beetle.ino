@@ -20,7 +20,7 @@ unsigned long rpm3 = 0;
 // Pump duty cycle (0-255 for 0-100%)
 int dutyCycle1 = 80;  // Adjust this value to set pump speed
 int dutyCycle2 = 0;   // Adjust this value to set pump speed
-int dutyCycle3 = 100; // Independent duty cycle for NMR pump
+int dutyCycle3 = 50;  // Independent duty cycle for NMR pump
 
 const int updateInterval = 1000; // RPM update interval in ms
 unsigned long previousMillis = 0;
@@ -75,6 +75,24 @@ void setup() {
 }
 
 void loop() {
+  // Check for serial input to adjust duty cycles of Pump 1 and NMR Pump
+  if (Serial.available() > 0) {
+    String input = Serial.readStringUntil('\n');
+    int commaIndex = input.indexOf(',');
+    if (commaIndex > 0) {
+      int inputDutyCycle1 = input.substring(0, commaIndex).toInt();
+      int inputDutyCycle3 = input.substring(commaIndex + 1).toInt();
+      if (inputDutyCycle1 >= 0 && inputDutyCycle1 <= 255) {
+        dutyCycle1 = inputDutyCycle1;
+        Timer1.pwm(PUMP_PIN1, dutyCycle1);
+      }
+      if (inputDutyCycle3 >= 0 && inputDutyCycle3 <= 255) {
+        dutyCycle3 = inputDutyCycle3;
+        Timer1.pwm(PUMP_PIN3, dutyCycle3);
+      }
+    }
+  }
+
   // Polling for falling edges on A0, A1, and A2 to count pulses
   int currentState1 = digitalRead(TACHO_PIN1);
   int currentState2 = digitalRead(TACHO_PIN2);

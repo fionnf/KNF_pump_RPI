@@ -14,10 +14,10 @@ unsigned long rpm1 = 0;
 unsigned long rpm2 = 0;
 
 // Pump duty cycle (0-255 for 0-100%)
-int dutyCycle1 = 80;  // Adjust this value to set pump speed
-int dutyCycle2 = 0;  // Adjust this value to set pump speed
+int dutyCycle1 = 0;  // Adjust this value to set pump speed 150
+int dutyCycle2 = 0;  // Adjust this value to set pump speed 90
 
-const int updateInterval = 1000; // RPM update interval in ms
+const int updateInterval = 2000; // RPM update interval in ms
 unsigned long previousMillis = 0;
 
 // State variables for detecting edges
@@ -25,7 +25,7 @@ int lastState1 = HIGH;
 int lastState2 = HIGH;
 
 // Moving average filter parameters
-const int filterSize = 25;
+const int filterSize = 10;
 unsigned long rpm1Readings[filterSize] = {0};
 unsigned long rpm2Readings[filterSize] = {0};
 int filterIndex1 = 0;
@@ -48,7 +48,7 @@ void setup() {
   Timer1.initialize(100);  // Set frequency to 10 kHz (100 microseconds period)
   Timer1.pwm(PUMP_PIN1, dutyCycle1);
   Timer1.pwm(PUMP_PIN2, dutyCycle2);
-
+ 
   Serial.print("Pump 1 rpm");
   Serial.print(", ");
   Serial.print("Pump 1 avg");
@@ -56,7 +56,7 @@ void setup() {
   Serial.print("Pump 2 rpm");
   Serial.print(", ");
   Serial.println("Pump 2 avg");
-
+  
 }
 
 void loop() {
@@ -109,8 +109,8 @@ void loop() {
     Serial.println(rpm2Avg);
 
     // Adjust duty cycle of Pump 2 to match RPM of Pump 1
-    int rpmDifference = rpm1Avg - rpm2Avg;
-    dutyCycle2 += rpmDifference / 200; // Adjust this factor as needed for how aggressive adjustments are
+    int rpmDifference = rpm1 - rpm2;
+    dutyCycle2 += rpmDifference / 100; // Adjust this factor as needed for how aggressive adjustments are
     dutyCycle2 = constrain(dutyCycle2, 0, 255);
     Timer1.pwm(PUMP_PIN2, dutyCycle2);
 

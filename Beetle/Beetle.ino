@@ -18,9 +18,9 @@ unsigned long rpm2 = 0;
 unsigned long rpm3 = 0;
 
 // Pump duty cycle (0-255 for 0-100%)
-int dutyCycle1 = 80;  // Adjust this value to set pump speed
+int dutyCycle1 = 100;  // Adjust this value to set pump speed
 int dutyCycle2 = 0;   // Adjust this value to set pump speed
-int dutyCycle3 = 200;  // Independent duty cycle for NMR pump
+int dutyCycle3 = 45;  // Independent duty cycle for NMR pump
 
 const int updateInterval = 1000; // RPM update interval in ms
 unsigned long previousMillis = 0;
